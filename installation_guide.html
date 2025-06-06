@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan Earthquake Viewer - Installation Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #fffde7;
+            border-left: 4px solid #ffd600;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Japan Earthquake Viewer - Installation Guide</h1>
+    
+    <h2>Creating Installation Media</h2>
+    
+    <p>This guide will help you create installation media for the Japan Earthquake Viewer web application. Since this is a web application, "installation media" means creating a package that can be easily distributed and installed on various systems.</p>
+    
+    <h3>Option 1: Create a ZIP Archive</h3>
+    
+    <p>The simplest way to distribute the application is to create a ZIP archive containing all the necessary files.</p>
+    
+    <ol>
+        <li>Make sure you have all the required files:
+            <ul>
+                <li>HTML, CSS, and JavaScript files</li>
+                <li>Image and sound files</li>
+                <li>Documentation</li>
+            </ul>
+        </li>
+        <li>Create a ZIP archive:
+            <pre>zip -r JapanEarthquakeViewer.zip index.html css/ js/ img/ sounds/ README.md LICENSE.txt installation_guide.html</pre>
+        </li>
+        <li>Distribute the ZIP file to users who can extract it and open the index.html file in their browser.</li>
+    </ol>
+    
+    <h3>Option 2: Create an Electron App</h3>
+    
+    <p>To create a desktop application that can be installed like traditional software, you can use Electron to package the web application.</p>
+    
+    <ol>
+        <li>Install Node.js and npm if you haven't already.</li>
+        <li>Create a new Electron project:
+            <pre>
+npm init -y
+npm install --save-dev electron electron-builder
+            </pre>
+        </li>
+        <li>Create a main.js file for Electron:
+            <pre>
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+
+function createWindow() {
+    const win = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true
+        }
+    });
+
+    win.loadFile('index.html');
+}
+
+app.whenReady().then(() => {
+    createWindow();
+    
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
+});
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+            </pre>
+        </li>
+        <li>Update package.json with build configuration:
+            <pre>
+{
+  "name": "japan-earthquake-viewer",
+  "version": "1.0.0",
+  "description": "Japan Real-time Earthquake Viewer",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.earthquakeviewer.app",
+    "productName": "Japan Earthquake Viewer",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "img/earthquake-icon.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "img/earthquake-icon.icns"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "icon": "img/earthquake-icon.png"
+    }
+  }
+}
+            </pre>
+        </li>
+        <li>Build the application:
+            <pre>npm run build</pre>
+        </li>
+        <li>The installer will be created in the dist directory.</li>
+    </ol>
+    
+    <div class="note">
+        <p><strong>Note:</strong> For the Electron app, you'll need to convert your web application to work in the Electron environment. This may require some modifications to the code, especially for features that interact with the browser's APIs.</p>
+    </div>
+    
+    <h3>Option 3: Create a Progressive Web App (PWA)</h3>
+    
+    <p>Another option is to turn your web application into a Progressive Web App that can be installed from a web browser.</p>
+    
+    <ol>
+        <li>Create a manifest.json file:
+            <pre>
+{
+  "name": "Japan Earthquake Viewer",
+  "short_name": "Earthquake Viewer",
+  "description": "Real-time earthquake data for Japan",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007bff",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+            </pre>
+        </li>
+        <li>Add a link to the manifest in your index.html:
+            <pre>&lt;link rel="manifest" href="manifest.json"&gt;</pre>
+        </li>
+        <li>Create a service worker (service-worker.js):
+            <pre>
+const CACHE_NAME = 'earthquake-viewer-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/css/styles.css',
+  '/js/app.js',
+  '/js/api.js',
+  '/js/config.js',
+  '/js/map.js',
+  '/js/notifications.js',
+  '/img/earthquake-icon.png',
+  '/sounds/notification.mp3'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
+            </pre>
+        </li>
+        <li>Register the service worker in your app.js:
+            <pre>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful');
+      })
+      .catch(error => {
+        console.error('ServiceWorker registration failed:', error);
+      });
+  });
+}
+            </pre>
+        </li>
+        <li>Host the application on a web server with HTTPS.</li>
+        <li>Users can install the PWA from their browser.</li>
+    </ol>
+    
+    <h2>Distribution</h2>
+    
+    <p>Once you've created your installation media, you can distribute it through various channels:</p>
+    
+    <ul>
+        <li><strong>Website:</strong> Host the files on your website for download</li>
+        <li><strong>GitHub Releases:</strong> Create a release on GitHub with the installation files</li>
+        <li><strong>App Stores:</strong> If you've created an Electron app, you can distribute it through app stores like the Microsoft Store</li>
+        <li><strong>Web Hosting:</strong> For the PWA option, host the application on a web server</li>
+    </ul>
+    
+    <h2>System Requirements</h2>
+    
+    <p>The Japan Earthquake Viewer has the following system requirements:</p>
+    
+    <ul>
+        <li><strong>Web Application:</strong> Any modern web browser (Chrome, Firefox, Edge, Safari)</li>
+        <li><strong>Electron App:</strong> Windows 10/11, macOS 10.13+, or Linux</li>
+        <li><strong>PWA:</strong> Any modern web browser with PWA support</li>
+    </ul>
+    
+    <div class="note">
+        <p><strong>Note:</strong> For the best experience, users should have a stable internet connection to receive real-time earthquake updates.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+<?import org.jxmapviewer.JXMapViewer?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.earthquakeviewer.ui.MainController">
+    <top>
+        <VBox spacing="5">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Japan Real-time Earthquake Viewer" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="statusLabel" text="Ready" style="-fx-font-style: italic;"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+            <Tab text="Earthquake List">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Min Magnitude:"/>
+                        <Slider fx:id="magnitudeSlider" prefWidth="150"/>
+                        <Label text="Prefecture:"/>
+                        <ComboBox fx:id="prefectureComboBox" prefWidth="150"/>
+                        <Label text="Start Date:"/>
+                        <DatePicker fx:id="startDatePicker"/>
+                        <Label text="End Date:"/>
+                        <DatePicker fx:id="endDatePicker"/>
+                        <Button fx:id="applyFilterButton" text="Apply Filter"/>
+                        <Button fx:id="resetFilterButton" text="Reset"/>
+                    </HBox>
+                    
+                    <TableView fx:id="earthquakeTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="timeColumn" text="Time" prefWidth="150"/>
+                            <TableColumn fx:id="locationColumn" text="Location" prefWidth="200"/>
+                            <TableColumn fx:id="magnitudeColumn" text="Magnitude" prefWidth="100"/>
+                            <TableColumn fx:id="depthColumn" text="Depth" prefWidth="100"/>
+                            <TableColumn fx:id="intensityColumn" text="Max Intensity" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+            
+            <Tab text="Map View">
+                <BorderPane>
+                    <center>
+                        <StackPane>
+                            <!-- Map will be added programmatically -->
+                        </StackPane>
+                    </center>
+                </BorderPane>
+            </Tab>
+            
+            <Tab text="Details">
+                <WebView fx:id="detailWebView"/>
+            </Tab>
+        </TabPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #f0f0f0;">
+            <padding>
+                <Insets top="5" right="10" bottom="5" left="10"/>
+            </padding>
+            <Label text="Data provided by P2P Quake API" style="-fx-font-style: italic;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Hyperlink text="www.p2pquake.net" onAction="#openP2PQuakeWebsite"/>
+        </HBox>
+    </bottom>
+</BorderPane>

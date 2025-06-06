@@ -1,0 +1,150 @@
+/* Main Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Table styles */
+.table-responsive {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#earthquake-table tbody tr,
+#history-table tbody tr {
+    cursor: pointer;
+}
+
+#earthquake-table tbody tr:hover,
+#history-table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Map styles */
+.leaflet-popup-content {
+    max-width: 300px;
+}
+
+/* Earthquake intensity colors */
+.intensity-1 {
+    background-color: #acd9e9 !important;
+}
+
+.intensity-2 {
+    background-color: #80c4de !important;
+}
+
+.intensity-3 {
+    background-color: #52b2d3 !important;
+}
+
+.intensity-4 {
+    background-color: #24a0c8 !important;
+    color: white !important;
+}
+
+.intensity-5-minus {
+    background-color: #1e90ff !important;
+    color: white !important;
+}
+
+.intensity-5-plus {
+    background-color: #0000ff !important;
+    color: white !important;
+}
+
+.intensity-6-minus {
+    background-color: #ffff00 !important;
+}
+
+.intensity-6-plus {
+    background-color: #ffa500 !important;
+}
+
+.intensity-7 {
+    background-color: #ff0000 !important;
+    color: white !important;
+}
+
+/* Marker styles */
+.earthquake-marker {
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+/* Status indicator */
+#connection-status.connected {
+    background-color: #28a745;
+}
+
+#connection-status.connecting {
+    background-color: #ffc107;
+}
+
+#connection-status.disconnected {
+    background-color: #dc3545;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body.theme-auto {
+        background-color: #212529;
+        color: #f8f9fa;
+    }
+    
+    body.theme-auto .card {
+        background-color: #343a40;
+        color: #f8f9fa;
+    }
+    
+    body.theme-auto .table {
+        color: #f8f9fa;
+    }
+    
+    body.theme-auto .bg-light {
+        background-color: #343a40 !important;
+        color: #f8f9fa;
+    }
+    
+    body.theme-auto footer {
+        background-color: #343a40 !important;
+        color: #f8f9fa;
+    }
+    
+    body.theme-auto footer a {
+        color: #8bb9fe;
+    }
+}
+
+body.theme-dark {
+    background-color: #212529;
+    color: #f8f9fa;
+}
+
+body.theme-dark .card {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+
+body.theme-dark .table {
+    color: #f8f9fa;
+}
+
+body.theme-dark .bg-light {
+    background-color: #343a40 !important;
+    color: #f8f9fa;
+}
+
+body.theme-dark footer {
+    background-color: #343a40 !important;
+    color: #f8f9fa;
+}
+
+body.theme-dark footer a {
+    color: #8bb9fe;
+}
