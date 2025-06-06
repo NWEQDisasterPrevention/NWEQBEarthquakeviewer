@@ -19,14 +19,7 @@ A web application for monitoring and visualizing real-time earthquake data in Ja
 
 ### Installation
 
-1. **Local Usage**:
-   - Simply open the `index.html` file in your web browser
-
-2. **Web Server Deployment**:
-   - Upload all files to your web server
-   - No server-side processing is required as this is a client-side application
-
-3. **Required Files**:
+ **Required Files**:
    - Add a notification sound file at `sounds/notification.mp3`
    - Add an earthquake icon at `img/earthquake-icon.png`
    - Add a favicon at `img/favicon.ico`
